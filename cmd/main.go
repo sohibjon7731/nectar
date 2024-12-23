@@ -5,7 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sohibjon7731/ecommerce_backend/config"
-	"github.com/sohibjon7731/ecommerce_backend/internal/auth/handler"
+	authHandler "github.com/sohibjon7731/ecommerce_backend/internal/auth/handler"
+	productHandler "github.com/sohibjon7731/ecommerce_backend/internal/product/handler"
 )
 
 func main() {
@@ -15,11 +16,14 @@ func main() {
 	}
 
 	r := gin.Default()
-	authHandler := handler.NewAuthHandler()
+	authHandler := authHandler.NewAuthHandler()
+	productHandler:= productHandler.NewProductHandler()
 	api := r.Group("/api/v1/auth")
 	{
 		api.POST("/register", authHandler.Register)
 		api.POST("/login", authHandler.Login)
+		api.POST("/product/create", productHandler.Create)
+		api.GET("/products", productHandler.GetAllProducts)
 	}
 
 	r.Run(":8080")
