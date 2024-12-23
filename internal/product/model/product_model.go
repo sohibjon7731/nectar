@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 type Product struct{
 	gorm.Model
-	Image string `json:"image"`
-	Title string `json:"title"`
-	Price float64 `json:"price"`
-	Description string `json:"description"`
+	Image string `gorm:"type:varchar(255); not null"`
+	Title string `gorm:"type:varchar(255); not null"`
+	Price float64 `gorm:"type:text; not null"`
+	Description string `gorm:"not null"`
 }
