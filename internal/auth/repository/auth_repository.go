@@ -3,9 +3,8 @@ package repository
 import (
 	"log"
 
-	"github.com/sohibjon7731/ecommerce_backend/config"
+	"github.com/sohibjon7731/ecommerce_backend/database"
 	"github.com/sohibjon7731/ecommerce_backend/internal/auth/model"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -14,11 +13,11 @@ type AuthRepository struct {
 }
 
 func NewAuthRepository() *AuthRepository {
-	db, err := gorm.Open(postgres.Open(config.GetDBDSN()), &gorm.Config{})
+	db, err:= database.DBConnect()
 	if err != nil {
-		log.Fatal("failed to connect to database" + err.Error())
+		log.Fatal("Failed to connect to database")
 	}
-	err = db.AutoMigrate(&model.User{})
+	err=db.AutoMigrate(&model.User{})
 	if err != nil {
 		log.Fatal("failed to migrate user model: " + err.Error())
 	}
