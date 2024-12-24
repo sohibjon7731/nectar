@@ -11,7 +11,7 @@ import (
 	authHandler "github.com/sohibjon7731/ecommerce_backend/internal/auth/handler"
 	productHandler "github.com/sohibjon7731/ecommerce_backend/internal/product/handler"
 	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"	
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title Swagger Example API
@@ -32,7 +32,7 @@ func main() {
 	api := r.Group("/api/v1")
 	{
 		api.POST("/auth/register", authHandler.Register)
-		api.POST("auth/login", authHandler.Login)
+		api.POST("/auth/login", authHandler.Login)
 		api.POST("/product/create", productHandler.Create)
 		api.GET("/products", productHandler.GetAllProducts)
 	}
