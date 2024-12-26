@@ -26,14 +26,14 @@ func NewAuthHandler() *AuthHandler {
 // @Produce  json
 // @Param register body dto.RegisterDTO true "Register User"
 // @Success 200 {object} dto.Success
-// @Failure 400 {object} string
+// @Failure 400 {object} dto.Error
 // @Failure 500 {object} map[string]int
 // @Router /auth/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
 	var input dto.RegisterDTO
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid input",
+		c.JSON(http.StatusBadRequest, dto.Error{
+			Message: "invalid input",
 		})
 		return
 	}
@@ -49,6 +49,17 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	})
 }
 
+// Login godoc
+// @Summary Login user
+// @Description This endpoint allows a new user to login with an email, password.
+// @Tags accounts
+// @Accept  json
+// @Produce  json
+// @Param register body dto.LoginDTO true "Login User"
+// @Success 200 {object} dto.Success
+// @Failure 400 {object} dto.Error
+// @Failure 500 {object} map[string]int
+// @Router /auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
 	var input dto.LoginDTO
 

@@ -1,5 +1,20 @@
 basePath: /api/v1
 definitions:
+  dto.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.LoginDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   dto.RegisterDTO:
     properties:
       email:
@@ -21,6 +36,38 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows a new user to login with an email, password.
+      parameters:
+      - description: Login User
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Success'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+      summary: Login user
+      tags:
+      - accounts
   /auth/register:
     post:
       consumes:
@@ -44,7 +91,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/dto.Error'
         "500":
           description: Internal Server Error
           schema:
