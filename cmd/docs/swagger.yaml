@@ -1,8 +1,57 @@
 basePath: /api/v1
+definitions:
+  dto.RegisterDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      password_confirmation:
+        type: string
+    type: object
+  dto.Success:
+    properties:
+      result:
+        example: success
+        type: string
+    type: object
 info:
   contact: {}
   description: This is a sample server for Swagger integration.
   title: Swagger Example API
   version: "1.0"
-paths: {}
+paths:
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows a new user to register with an email, password,
+        and password confirmation.
+      parameters:
+      - description: Register User
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Success'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+      summary: Register a new user
+      tags:
+      - accounts
 swagger: "2.0"

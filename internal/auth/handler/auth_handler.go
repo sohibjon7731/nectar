@@ -19,17 +19,15 @@ func NewAuthHandler() *AuthHandler {
 }
 
 // Register godoc
-// @BasePath /api/v1
 // @Summary Register a new user
-// Schemes
 // @Description This endpoint allows a new user to register with an email, password, and password confirmation.
-// @Tags auth
+// @Tags accounts
 // @Accept  json
 // @Produce  json
 // @Param register body dto.RegisterDTO true "Register User"
-// @Success 200 {object} gin.H{"email": string, "created_at": string, "updated_at": string}
-// @Failure 400 {object} gin.H{"error": string}
-// @Failure 500 {object} gin.H{"error": string}
+// @Success 200 {object} dto.Success
+// @Failure 400 {object} string
+// @Failure 500 {object} map[string]int
 // @Router /auth/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
 	var input dto.RegisterDTO
@@ -39,18 +37,15 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		})
 		return
 	}
-	user, err := h.Service.Register(input.Email, input.Password, input.PasswordConfirmation)
+	_, err := h.Service.Register(input.Email, input.Password, input.PasswordConfirmation)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-
-		"email":      user.Email,
-		"created_at": user.CreatedAt,
-		"updated_at": user.UpdatedAt,
+	c.JSON(http.StatusOK, dto.Success{
+		Result: "Success",
 	})
 }
 
