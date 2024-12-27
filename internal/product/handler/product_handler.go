@@ -17,15 +17,26 @@ func NewProductHandler() *ProductHandler{
 	return &ProductHandler{Service: *service}
 }
 
+// CreateProduct godoc
+// @Summary Create a new product
+// @Description Adds a new product to the system
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Param product body dto.ProductCreateDTO true "Product data"
+// @Success 201 {object} dto.SuccessResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /product/create [post]
 func (h *ProductHandler) Create(c *gin.Context){
-	var input dto.ProductDTO
+	var input dto.ProductCreateDTO
 	if err:= c.ShouldBindJSON(&input); err!=nil{
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":"invalid input",
 		})
 		return
 	}
-	err:= h.Service.Create(input.Image, input.Title, input.Description, input.Price)
+	err:= h.Service.Create(input.Title, input.Description, input.Price, input.Image, )
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":err.Error(),
@@ -37,6 +48,16 @@ func (h *ProductHandler) Create(c *gin.Context){
 	})
 }
 
+// GetAllProducts godoc
+// @Summary Get All products
+// @Description Get All Products
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Success 200 {object} dto.SuccessResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /products [get]
 func (h *ProductHandler) GetAllProducts(c *gin.Context){
 	products, err:= h.Service.GetAllProducts()
 	if err != nil {
@@ -46,6 +67,6 @@ func (h *ProductHandler) GetAllProducts(c *gin.Context){
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"products":dto.ConvertToProductDTOs(products),
+		"products":dto.ConvertToProductResponseDTOs(products),
 	})
 }

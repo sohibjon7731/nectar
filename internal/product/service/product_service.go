@@ -16,12 +16,12 @@ func NewProductService() *ProductService{
 	return &ProductService{Repo: *repo}
 }
 
-func (s *ProductService) Create(image, title, description string, price float64) error{
+func (s *ProductService) Create(title, description string, price float64, image string) error{
 	product:= model.Product{
-		Image: image,
 		Title: title,
 		Description: description,
 		Price: price,
+		Image: image,
 	}
 	err:= s.Repo.Create(&product)
 	if err!=nil {
