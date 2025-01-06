@@ -25,7 +25,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "Accounts"
                 ],
                 "summary": "Login user",
                 "parameters": [
@@ -74,7 +74,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "Accounts"
                 ],
                 "summary": "Register a new user",
                 "parameters": [

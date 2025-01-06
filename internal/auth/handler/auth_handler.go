@@ -21,7 +21,7 @@ func NewAuthHandler() *AuthHandler {
 // Register godoc
 // @Summary Register a new user
 // @Description This endpoint allows a new user to register with an email, password, and password confirmation.
-// @Tags accounts
+// @Tags Accounts
 // @Accept  json
 // @Produce  json
 // @Param register body dto.RegisterDTO true "Register User"
@@ -52,7 +52,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 // Login godoc
 // @Summary Login user
 // @Description This endpoint allows a new user to login with an email, password.
-// @Tags accounts
+// @Tags Accounts
 // @Accept  json
 // @Produce  json
 // @Param register body dto.LoginDTO true "Login User"
