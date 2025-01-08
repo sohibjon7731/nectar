@@ -2,10 +2,7 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 var (
@@ -18,11 +15,7 @@ var (
 )
 
 func LoadConfig() error {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-		return err
-	}
+	
 
 	DBHost = os.Getenv("DB_HOST")
 	DBPort = os.Getenv("DB_PORT")
@@ -36,5 +29,5 @@ func LoadConfig() error {
 }
 
 func GetDBDSN() string {
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", DBHost, DBPort, DBUser, DBPassword, DBName)
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require", DBHost, DBPort, DBUser, DBPassword, DBName)
 }
