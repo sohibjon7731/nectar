@@ -27,7 +27,7 @@ func main() {
 
 	r := gin.Default()
 	docs.SwaggerInfo.BasePath = "/api/v1"
-	r.GET("/swagger/*any", gin.BasicAuth(gin.Accounts{"admin":"password"}) ,ginSwagger.WrapHandler(swaggerfiles.Handler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	authHandler := authHandler.NewAuthHandler()
 	productHandler:= productHandler.NewProductHandler()
 	api := r.Group("/api/v1")
