@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/sohibjon7731/ecommerce_backend/internal/auth/model"
 	"github.com/sohibjon7731/ecommerce_backend/internal/auth/repository"
@@ -21,46 +20,78 @@ func NewAuthService() *AuthService {
 	return &AuthService{Repo: *repo}
 }
 
-func (s *AuthService) Register(email, password, passwordConfirmation string) (*model.User, error) {
-	err := validator.EmailValidation(email)
-	if err != nil {
+func (s *AuthService) Register(email, password, username string) (*model.User, error) {
+	if err := validator.EmailValidation(email); err != nil {
 		return nil, err
 	}
-	exists, err := s.Repo.ExistUserEmail(email)
-	if err != nil {
-		return nil, errors.New("failed to check email existence")
+	
+	if err:= s.checkEmailAndUsername(email, username); err != nil {
+		return nil, err
 	}
-	if exists {
-		return nil, errors.New("email already taken")
-	}
-	err = validator.PasswordValidation(password)
-	if err != nil {
-		return nil, errors.New("Password is invalid")
+	
+	if err := validator.PasswordValidation(password); err != nil {
+		return nil, errors.New("invalid password")
 	}
 
-	if password != passwordConfirmation {
-		return nil, errors.New("passwords do not match")
-	}
+	
 
 	hashedPassword, err := util.HashPassword(password)
 	if err != nil {
 		return nil, err
 	}
-	user := &model.User{Email: email, Password: hashedPassword}
-	err = s.Repo.CreateUser(user)
+	user := &model.User{Email: email, Password: hashedPassword, Username: username,}
+	if err:=s.Repo.CreateUser(user); err!=nil {
+		return nil, errors.New("failed to create user")
+	}
 	return user, nil
 }
 
+func (s *AuthService) checkEmailAndUsername(email, username string)  error{
+	emailExist, err:= s.Repo.ExistUserEmail(email)
+	if err != nil {
+		return errors.New("failed to check email existence")
+	}
+	if emailExist {
+		return errors.New("email already taken")
+	}
+
+	usernameExist, err:= s.Repo.ExistUserUsername(username)
+	if err != nil {
+		return errors.New("failed to check email existence")
+	}
+	if usernameExist {
+		return errors.New("email already taken")
+	}
+
+	return nil
+}
+
 func (s *AuthService) Login(email, password string) (string, string, error) {
+	
 	user, err := s.Repo.GetUserByEmail(email)
-	fmt.Println(user)
 	if err != nil {
 		return "", "", errors.New("user not found")
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-	if err != nil {
-		return "", "", errors.New("invalid password")
+
+	
+	if err := s.verifyPassword(user.Password, password); err != nil {
+		return "", "", err
 	}
+
+	
 	accessToken, refreshToken, err := token.GenerateTokens(user.ID)
-	return accessToken, refreshToken, err
+	if err != nil {
+		return "", "", errors.New("failed to generate tokens")
+	}
+
+	return accessToken, refreshToken, nil
 }
+
+func (s *AuthService) verifyPassword(hashedPassword, plainPassword string) error {
+	
+	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(plainPassword)); err != nil {
+		return errors.New("invalid password")
+	}
+	return nil
+}
+

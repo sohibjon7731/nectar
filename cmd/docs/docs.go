@@ -259,7 +259,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "password_confirmation": {
+                "username": {
                     "type": "string"
                 }
             }

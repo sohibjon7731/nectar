@@ -46,3 +46,12 @@ func (r *AuthRepository) ExistUserEmail(email string) (bool, error) {
 	return count > 0, nil
 
 }
+
+func (r *AuthRepository) ExistUserUsername(username string) (bool, error)  {
+	var count int64
+	err:= r.DB.Model(&model.User{}).Where("username= ?", username).Count(&count).Error
+	if err!=nil {
+		return false, err
+	}
+	return count>0, nil
+}
