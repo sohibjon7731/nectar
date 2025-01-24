@@ -57,10 +57,10 @@ func (s *AuthService) checkEmailAndUsername(email, username string)  error{
 
 	usernameExist, err:= s.Repo.ExistUserUsername(username)
 	if err != nil {
-		return errors.New("failed to check email existence")
+		return errors.New("failed to check username existence")
 	}
 	if usernameExist {
-		return errors.New("email already taken")
+		return errors.New("username already taken")
 	}
 
 	return nil
