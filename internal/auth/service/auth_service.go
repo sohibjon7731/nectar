@@ -81,7 +81,7 @@ func (s *AuthService) Login(email, password string) (string, string, error) {
 	
 	accessToken, refreshToken, err := token.GenerateTokens(user.ID)
 	if err != nil {
-		return "", "", errors.New("failed to generate tokens")
+		return "", "", errors.New("failed to generate token")
 	}
 
 	return accessToken, refreshToken, nil
