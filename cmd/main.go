@@ -23,19 +23,27 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading config: ", err)
 	}
-	gin.SetMode(gin.ReleaseMode)
+	/* gin.SetMode(gin.ReleaseMode) */
 
 	r := gin.Default()
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	authHandler := authHandler.NewAuthHandler()
 	productHandler:= productHandler.NewProductHandler()
-	api := r.Group("/api/v1")
-	{
-		api.POST("/auth/register", authHandler.Register)
-		api.POST("/auth/login", authHandler.Login)
-		api.POST("/product/create", productHandler.Create)
-		api.GET("/products", productHandler.GetAllProducts)
+
+	api:=r.Group("/api/v1")
+	{		auth:= api.Group("/auth")
+			{
+				auth.POST("/register", authHandler.Register)
+				auth.POST("/login", authHandler.Login)
+			}
+		
+			products:= api.Group("/products")
+			{
+				products.POST("/create", productHandler.Create)
+				products.GET("", productHandler.GetAllProducts)
+			}
+		
 	}
 
 	r.Run(":8080")
