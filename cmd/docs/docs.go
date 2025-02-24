@@ -113,9 +113,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/product/create": {
-            "post": {
-                "description": "Adds a new product to the system",
+        "/products": {
+            "get": {
+                "description": "Get All Products",
                 "consumes": [
                     "application/json"
                 ],
@@ -125,21 +125,10 @@ const docTemplate = `{
                 "tags": [
                     "Products"
                 ],
-                "summary": "Create a new product",
-                "parameters": [
-                    {
-                        "description": "Product data",
-                        "name": "product",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.ProductCreateDTO"
-                        }
-                    }
-                ],
+                "summary": "Get All products",
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.SuccessResponse"
                         }
@@ -159,9 +148,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/products": {
-            "get": {
-                "description": "Get All Products",
+        "/products/create": {
+            "post": {
+                "description": "Adds a new product to the system",
                 "consumes": [
                     "application/json"
                 ],
@@ -171,10 +160,21 @@ const docTemplate = `{
                 "tags": [
                     "Products"
                 ],
-                "summary": "Get All products",
+                "summary": "Create a new product",
+                "parameters": [
+                    {
+                        "description": "Product data",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProductDTO"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/dto.SuccessResponse"
                         }
@@ -227,7 +227,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.ProductCreateDTO": {
+        "dto.ProductDTO": {
             "type": "object",
             "required": [
                 "description",

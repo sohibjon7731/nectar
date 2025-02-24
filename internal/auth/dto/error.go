@@ -1,5 +1,5 @@
 package dto
 
-type Error struct{
+type Error struct {
 	Message string
 }

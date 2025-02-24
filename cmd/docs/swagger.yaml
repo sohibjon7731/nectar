@@ -20,7 +20,7 @@ definitions:
     - email
     - password
     type: object
-  dto.ProductCreateDTO:
+  dto.ProductDTO:
     properties:
       description:
         type: string
@@ -127,36 +127,6 @@ paths:
       summary: Register a new user
       tags:
       - Accounts
-  /product/create:
-    post:
-      consumes:
-      - application/json
-      description: Adds a new product to the system
-      parameters:
-      - description: Product data
-        in: body
-        name: product
-        required: true
-        schema:
-          $ref: '#/definitions/dto.ProductCreateDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.SuccessResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/dto.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/dto.ErrorResponse'
-      summary: Create a new product
-      tags:
-      - Products
   /products:
     get:
       consumes:
@@ -178,6 +148,36 @@ paths:
           schema:
             $ref: '#/definitions/dto.ErrorResponse'
       summary: Get All products
+      tags:
+      - Products
+  /products/create:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new product to the system
+      parameters:
+      - description: Product data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProductDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Create a new product
       tags:
       - Products
 swagger: "2.0"

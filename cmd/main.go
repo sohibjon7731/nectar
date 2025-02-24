@@ -29,21 +29,23 @@ func main() {
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	authHandler := authHandler.NewAuthHandler()
-	productHandler:= productHandler.NewProductHandler()
+	productHandler := productHandler.NewProductHandler()
 
-	api:=r.Group("/api/v1")
-	{		auth:= api.Group("/auth")
-			{
-				auth.POST("/register", authHandler.Register)
-				auth.POST("/login", authHandler.Login)
-			}
+	api := r.Group("/api/v1")
+	{
+		auth := api.Group("/auth")
+		{
+			auth.POST("/register", authHandler.Register)
+			auth.POST("/login", authHandler.Login)
+		}
+
+		products := api.Group("/products")
 		
-			products:= api.Group("/products")
-			{
-				products.POST("/create", productHandler.Create)
-				products.GET("", productHandler.GetAllProducts)
-			}
-		
+		{
+			products.POST("/create", productHandler.Create)
+			products.GET("", productHandler.GetAllProducts)
+		}
+
 	}
 
 	r.Run(":8080")

@@ -23,13 +23,13 @@ func NewProductHandler() *ProductHandler{
 // @Tags Products
 // @Accept json
 // @Produce json
-// @Param product body dto.ProductCreateDTO true "Product data"
+// @Param product body dto.ProductDTO true "Product data"
 // @Success 201 {object} dto.SuccessResponse
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 500 {object} dto.ErrorResponse
-// @Router /product/create [post]
+// @Router /products/create [post]
 func (h *ProductHandler) Create(c *gin.Context){
-	var input dto.ProductCreateDTO
+	var input dto.ProductDTO
 	if err:= c.ShouldBindJSON(&input); err!=nil{
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":"invalid input",

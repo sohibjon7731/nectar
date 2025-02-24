@@ -2,7 +2,7 @@ package dto
 
 import "github.com/sohibjon7731/ecommerce_backend/internal/product/model"
 
-type ProductCreateDTO struct {
+type ProductDTO struct {
 	Title       string  `json:"title" binding:"required"`
 	Description string  `json:"description" binding:"required"`
 	Price       float64 `json:"price" binding:"required"`
