@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 
+	"github.com/sohibjon7731/ecommerce_backend/internal/product/dto"
 	"github.com/sohibjon7731/ecommerce_backend/internal/product/model"
 	"github.com/sohibjon7731/ecommerce_backend/internal/product/repository"
 )
@@ -36,4 +37,8 @@ func (s *ProductService) GetAllProducts() ([]model.Product, error) {
 		return nil, errors.New("Not found products")
 	}
 	return products, nil
+}
+
+func (s *ProductService) UpdateProduct(id uint64,updateDTO dto.ProductDTO) (*model.Product , error){
+	return s.UpdateProduct(id, updateDTO)
 }
