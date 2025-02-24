@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -58,7 +59,7 @@ func (h *ProductHandler) Create(c *gin.Context) {
 // @Success 200 {object} dto.SuccessResponse
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 500 {object} dto.ErrorResponse
-// @Router /products [get]
+// @Router /products/all [get]
 func (h *ProductHandler) GetAllProducts(c *gin.Context) {
 	products, err := h.Service.GetAllProducts()
 	if err != nil {
@@ -72,21 +73,21 @@ func (h *ProductHandler) GetAllProducts(c *gin.Context) {
 	})
 }
 
-
 // UpdateProduct godoc
 // @Summary update a product
 // @Description update a product
 // @Tags Products
 // @Accept json
 // @Produce json
-// @Param id path int true "Product ID" 
+// @Param id path int true "Product ID"
 // @Param product body dto.ProductDTO true "Product data"
 // @Success 201 {object} dto.SuccessResponse
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 500 {object} dto.ErrorResponse
-// @Router /products/update/id [post]
+// @Router /products/update/{id} [put]
 func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	idParam := c.Param("id")
+	fmt.Println("Received ID:", idParam)
 	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

@@ -127,7 +127,7 @@ paths:
       summary: Register a new user
       tags:
       - Accounts
-  /products:
+  /products/all:
     get:
       consumes:
       - application/json
@@ -180,8 +180,8 @@ paths:
       summary: Create a new product
       tags:
       - Products
-  /products/update/id:
-    post:
+  /products/update/{id}:
+    put:
       consumes:
       - application/json
       description: update a product

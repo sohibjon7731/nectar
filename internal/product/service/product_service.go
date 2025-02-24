@@ -40,5 +40,5 @@ func (s *ProductService) GetAllProducts() ([]model.Product, error) {
 }
 
 func (s *ProductService) UpdateProduct(id uint64,updateDTO dto.ProductDTO) (*model.Product , error){
-	return s.UpdateProduct(id, updateDTO)
+	return s.Repo.UpdateProduct(id, updateDTO)
 }

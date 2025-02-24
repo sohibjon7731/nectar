@@ -19,36 +19,34 @@ import (
 // @description This is a sample server for Swagger integration.
 // @BasePath /api/v1
 func main() {
-	err := config.LoadConfig()
-	if err != nil {
-		log.Fatal("Error loading config: ", err)
+	if err := config.LoadConfig(); err != nil {
+		log.Println("Warning: Config file not found or invalid:", err)
 	}
-	/* gin.SetMode(gin.ReleaseMode) */
 
 	r := gin.Default()
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	authHandler := authHandler.NewAuthHandler()
-	productHandler := productHandler.NewProductHandler()
+
+	authH := authHandler.NewAuthHandler()
+	productH := productHandler.NewProductHandler()
 
 	api := r.Group("/api/v1")
 	{
 		auth := api.Group("/auth")
 		{
-			auth.POST("/register", authHandler.Register)
-			auth.POST("/login", authHandler.Login)
+			auth.POST("/register", authH.Register)
+			auth.POST("/login", authH.Login)
 		}
 
 		products := api.Group("/products")
-		
 		{
-			products.POST("/create", productHandler.Create)
-			products.GET("/all", productHandler.GetAllProducts)
-			products.PUT("/update/:id", productHandler.UpdateProduct)
+			products.POST("/create", productH.Create)
+			products.GET("/all", productH.GetAllProducts)
+			products.PUT("/update/:id", productH.UpdateProduct)
 		}
-
 	}
 
-	r.Run(":8080")
-
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal("Server failed to start:", err)
+	}
 }

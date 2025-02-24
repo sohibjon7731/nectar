@@ -113,7 +113,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/products": {
+        "/products/all": {
             "get": {
                 "description": "Get All Products",
                 "consumes": [
@@ -194,8 +194,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/update/id": {
-            "post": {
+        "/products/update/{id}": {
+            "put": {
                 "description": "update a product",
                 "consumes": [
                     "application/json"
