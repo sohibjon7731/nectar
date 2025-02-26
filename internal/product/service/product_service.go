@@ -26,7 +26,7 @@ func (s *ProductService) Create(title, description string, price float64, image 
 	}
 	err := s.Repo.Create(&product)
 	if err != nil {
-		return errors.New("Error create Product table")
+		return errors.New("error create Product table")
 	}
 	return nil
 }
@@ -34,7 +34,7 @@ func (s *ProductService) Create(title, description string, price float64, image 
 func (s *ProductService) GetAllProducts() ([]model.Product, error) {
 	products, err := s.Repo.GetAllProducts()
 	if err != nil {
-		return nil, errors.New("Not found products")
+		return nil, errors.New("not found products")
 	}
 	return products, nil
 }
@@ -42,3 +42,8 @@ func (s *ProductService) GetAllProducts() ([]model.Product, error) {
 func (s *ProductService) UpdateProduct(id uint64,updateDTO dto.ProductDTO) (*model.Product , error){
 	return s.Repo.UpdateProduct(id, updateDTO)
 }
+
+func (s *ProductService) DeleteProduct(id uint64) error  {
+	return s.Repo.DeleteProduct(id)
+}
+

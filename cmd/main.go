@@ -43,6 +43,7 @@ func main() {
 			products.POST("/create", productH.Create)
 			products.GET("/all", productH.GetAllProducts)
 			products.PUT("/update/:id", productH.UpdateProduct)
+			products.DELETE("/delete/:id", productH.DeleteProduct)
 		}
 	}
 

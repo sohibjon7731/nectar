@@ -60,3 +60,8 @@ func (r *ProductRepository) UpdateProduct(id uint64, updateDTO dto.ProductDTO) (
 
 	return &product, nil
 }
+
+func (r *ProductRepository) DeleteProduct(id uint64) error  {
+	var product model.Product
+	return r.DB.Where("id= ?", id).Delete(&product).Error
+}
