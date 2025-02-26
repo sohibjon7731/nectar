@@ -180,7 +180,7 @@ paths:
       summary: Create a new product
       tags:
       - Products
-  /products/update/{id}:
+  /products/delete/{id}:
     delete:
       consumes:
       - application/json
@@ -209,7 +209,8 @@ paths:
       summary: delete a product
       tags:
       - Products
-    put:
+  /products/update/{id}:
+    patch:
       consumes:
       - application/json
       description: update a product

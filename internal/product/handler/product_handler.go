@@ -85,7 +85,7 @@ func (h *ProductHandler) GetAllProducts(c *gin.Context) {
 // @Success 201 {object} dto.SuccessResponse
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 500 {object} dto.ErrorResponse
-// @Router /products/update/{id} [put]
+// @Router /products/update/{id} [patch]
 func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	idParam := c.Param("id")
 	fmt.Println("Received ID:", idParam)
@@ -125,7 +125,7 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 // @Success 201 {object} dto.SuccessResponse
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 500 {object} dto.ErrorResponse
-// @Router /products/update/{id} [delete]
+// @Router /products/delete/{id} [delete]
 func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 64)

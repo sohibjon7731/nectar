@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/sohibjon7731/ecommerce_backend/internal/product/dto"
 	"github.com/sohibjon7731/ecommerce_backend/internal/product/model"
@@ -44,6 +45,7 @@ func (s *ProductService) UpdateProduct(id uint64,updateDTO dto.ProductDTO) (*mod
 }
 
 func (s *ProductService) DeleteProduct(id uint64) error  {
+	fmt.Println("nimadir")
 	return s.Repo.DeleteProduct(id)
 }
 
