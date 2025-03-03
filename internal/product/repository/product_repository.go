@@ -53,7 +53,7 @@ func (r *ProductRepository) UpdateProduct(id uint64, updateDTO dto.ProductDTO) (
 	product.Title = updateDTO.Title
 	product.Description = updateDTO.Description
 	product.Price = updateDTO.Price
-	product.Image = updateDTO.Image
+	product.Image = updateDTO.Image.Filename
 
 	if err := r.DB.Save(&product).Error; err != nil {
 		return nil, err

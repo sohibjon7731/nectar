@@ -19,11 +19,13 @@ import (
 // @description This is a sample server for Swagger integration.
 // @BasePath /api/v1
 func main() {
+	
 	if err := config.LoadConfig(); err != nil {
 		log.Println("Warning: Config file not found or invalid:", err)
 	}
 
 	r := gin.Default()
+	r.Static("/upload", "./uploads")
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

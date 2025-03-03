@@ -1,12 +1,16 @@
 package dto
 
-import "github.com/sohibjon7731/ecommerce_backend/internal/product/model"
+import (
+	"mime/multipart"
+
+	"github.com/sohibjon7731/ecommerce_backend/internal/product/model"
+)
 
 type ProductDTO struct {
-	Title       string  `json:"title" binding:"required"`
-	Description string  `json:"description" binding:"required"`
-	Price       float64 `json:"price" binding:"required"`
-	Image       string  `json:"image" binding:"required"`
+	Title       string  `form:"title" binding:"required"`
+	Description string  `form:"description" binding:"required"`
+	Price       float64 `form:"price" binding:"required"`
+	Image       *multipart.FileHeader  `form:"image" binding:"required"`
 }
 
 

@@ -20,22 +20,6 @@ definitions:
     - email
     - password
     type: object
-  dto.ProductDTO:
-    properties:
-      description:
-        type: string
-      image:
-        type: string
-      price:
-        type: number
-      title:
-        type: string
-    required:
-    - description
-    - image
-    - price
-    - title
-    type: object
   dto.RegisterDTO:
     properties:
       email:
@@ -153,30 +137,49 @@ paths:
   /products/create:
     post:
       consumes:
-      - application/json
-      description: Adds a new product to the system
+      - multipart/form-data
+      description: Adds a new product with an image to the system
       parameters:
-      - description: Product data
-        in: body
-        name: product
+      - description: Product title
+        in: formData
+        name: title
         required: true
-        schema:
-          $ref: '#/definitions/dto.ProductDTO'
+        type: string
+      - description: Product description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Product price
+        in: formData
+        name: price
+        required: true
+        type: number
+      - description: Product image
+        in: formData
+        name: image
+        required: true
+        type: file
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.SuccessResponse'
+            additionalProperties: true
+            type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/dto.ErrorResponse'
+            additionalProperties:
+              type: string
+            type: object
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dto.ErrorResponse'
+            additionalProperties:
+              type: string
+            type: object
       summary: Create a new product
       tags:
       - Products
@@ -212,36 +215,51 @@ paths:
   /products/update/{id}:
     patch:
       consumes:
-      - application/json
-      description: update a product
+      - multipart/form-data
+      description: Updates an existing product with a new image (optional)
       parameters:
       - description: Product ID
         in: path
         name: id
         required: true
         type: integer
-      - description: Product data
-        in: body
-        name: product
-        required: true
-        schema:
-          $ref: '#/definitions/dto.ProductDTO'
+      - description: Product title
+        in: formData
+        name: title
+        type: string
+      - description: Product description
+        in: formData
+        name: description
+        type: string
+      - description: Product price
+        in: formData
+        name: price
+        type: number
+      - description: New product image (optional)
+        in: formData
+        name: image
+        type: file
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
-            $ref: '#/definitions/dto.SuccessResponse'
+            additionalProperties: true
+            type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/dto.ErrorResponse'
+            additionalProperties:
+              type: string
+            type: object
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dto.ErrorResponse'
-      summary: update a product
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a product
       tags:
       - Products
 swagger: "2.0"

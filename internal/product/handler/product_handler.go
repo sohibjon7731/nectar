@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -21,25 +22,47 @@ func NewProductHandler() *ProductHandler {
 }
 
 // CreateProduct godoc
-// @Summary Create a new product
-// @Description Adds a new product to the system
-// @Tags Products
-// @Accept json
-// @Produce json
-// @Param product body dto.ProductDTO true "Product data"
-// @Success 201 {object} dto.SuccessResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 500 {object} dto.ErrorResponse
-// @Router /products/create [post]
+// @Summary      Create a new product
+// @Description  Adds a new product with an image to the system
+// @Tags         Products
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param        title formData string true "Product title"
+// @Param        description formData string true "Product description"
+// @Param        price formData number true "Product price"
+// @Param        image formData file true "Product image"
+// @Success      201 {object} map[string]interface{}
+// @Failure      400 {object} map[string]string
+// @Failure      500 {object} map[string]string
+// @Router       /products/create [post]
 func (h *ProductHandler) Create(c *gin.Context) {
+	const uploadPath = "./uploads/"
 	var input dto.ProductDTO
-	if err := c.ShouldBindJSON(&input); err != nil {
+	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "invalid input",
 		})
 		return
 	}
-	err := h.Service.Create(input.Title, input.Description, input.Price, input.Image)
+	file, err := c.FormFile("image")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "error uploading image",
+		})
+		return
+	}
+	savePath := filepath.Join(uploadPath, file.Filename)
+	if err := c.SaveUploadedFile(file, savePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni saqlashda xatolik"})
+		return
+	}
+	host:= c.Request.Host
+	scheme:= "http"
+	if c.Request.TLS!=nil {
+		scheme = "https"
+	}
+	imageURL := fmt.Sprintf("%s://%s/upload/%s", scheme, host, file.Filename)
+	err = h.Service.Create(input.Title, input.Description, input.Price, imageURL)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -75,17 +98,20 @@ func (h *ProductHandler) GetAllProducts(c *gin.Context) {
 }
 
 // UpdateProduct godoc
-// @Summary update a product
-// @Description update a product
-// @Tags Products
-// @Accept json
-// @Produce json
-// @Param id path int true "Product ID"
-// @Param product body dto.ProductDTO true "Product data"
-// @Success 201 {object} dto.SuccessResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 500 {object} dto.ErrorResponse
-// @Router /products/update/{id} [patch]
+// @Summary      Update a product
+// @Description  Updates an existing product with a new image (optional)
+// @Tags         Products
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param        id path int true "Product ID"
+// @Param        title formData string false "Product title"
+// @Param        description formData string false "Product description"
+// @Param        price formData number false "Product price"
+// @Param        image formData file false "New product image (optional)"
+// @Success      200 {object} map[string]interface{}
+// @Failure      400 {object} map[string]string
+// @Failure      500 {object} map[string]string
+// @Router       /products/update/{id} [patch]
 func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	idParam := c.Param("id")
 	fmt.Println("Received ID:", idParam)
@@ -97,7 +123,7 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 		return
 	}
 	var productDTO dto.ProductDTO
-	if err := c.ShouldBindJSON(&productDTO); err != nil {
+	if err := c.ShouldBind(&productDTO); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request body",
 		})
@@ -113,7 +139,6 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, updatedProduct)
 }
-
 
 // DeleteProduct godoc
 // @Summary delete a product
@@ -144,8 +169,6 @@ func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"success":"product deleted successfully",
+		"success": "product deleted successfully",
 	})
 }
-
-
