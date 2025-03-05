@@ -12,5 +12,6 @@ type LoginDTO struct {
 }
 
 type Success struct {
-	Result string `json:"result" example:"success"`
+	AccessToken  string `json:"access_token" example:"string"`
+	RefreshToken string `json:"refresh_token" exapmle:"string"`
 }

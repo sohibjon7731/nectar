@@ -389,9 +389,12 @@ const docTemplate = `{
         "dto.Success": {
             "type": "object",
             "properties": {
-                "result": {
+                "access_token": {
                     "type": "string",
-                    "example": "success"
+                    "example": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },

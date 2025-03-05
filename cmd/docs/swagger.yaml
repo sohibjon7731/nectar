@@ -31,8 +31,10 @@ definitions:
     type: object
   dto.Success:
     properties:
-      result:
-        example: success
+      access_token:
+        example: string
+        type: string
+      refresh_token:
         type: string
     type: object
   dto.SuccessResponse:

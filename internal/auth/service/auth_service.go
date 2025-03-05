@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/sohibjon7731/ecommerce_backend/internal/auth/model"
 	"github.com/sohibjon7731/ecommerce_backend/internal/auth/repository"
@@ -20,34 +21,38 @@ func NewAuthService() *AuthService {
 	return &AuthService{Repo: *repo}
 }
 
-func (s *AuthService) Register(email, password, username string) (*model.User, error) {
+func (s *AuthService) Register(email, password, username string) (string, string, error) {
 	if err := validator.EmailValidation(email); err != nil {
-		return nil, err
-	}
-	
-	if err:= s.checkEmailAndUsername(email, username); err != nil {
-		return nil, err
-	}
-	
-	if err := validator.PasswordValidation(password); err != nil {
-		return nil, errors.New("invalid password")
+		return "", "", err
 	}
 
-	
+	if err := s.checkEmailAndUsername(email, username); err != nil {
+		return "", "", err
+	}
+
+	if err := validator.PasswordValidation(password); err != nil {
+		return "", "", errors.New("invalid password")
+	}
 
 	hashedPassword, err := util.HashPassword(password)
 	if err != nil {
-		return nil, err
+		return "", "", err
 	}
-	user := &model.User{Email: email, Password: hashedPassword, Username: username,}
-	if err:=s.Repo.CreateUser(user); err!=nil {
-		return nil, errors.New("failed to create user")
+	user := &model.User{Email: email, Password: hashedPassword, Username: username}
+	if err := s.Repo.CreateUser(user); err != nil {
+		return "", "", errors.New("failed to create user")
 	}
-	return user, nil
+	fmt.Println("user", user)
+	accessToken, refreshToken, err := token.GenerateTokens(user.ID)
+	if err != nil {
+		return "", "", errors.New("failed to generate token")
+	}
+
+	return accessToken, refreshToken, nil
 }
 
-func (s *AuthService) checkEmailAndUsername(email, username string)  error{
-	emailExist, err:= s.Repo.ExistUserEmail(email)
+func (s *AuthService) checkEmailAndUsername(email, username string) error {
+	emailExist, err := s.Repo.ExistUserEmail(email)
 	if err != nil {
 		return errors.New("failed to check email existence")
 	}
@@ -55,7 +60,7 @@ func (s *AuthService) checkEmailAndUsername(email, username string)  error{
 		return errors.New("email already taken")
 	}
 
-	usernameExist, err:= s.Repo.ExistUserUsername(username)
+	usernameExist, err := s.Repo.ExistUserUsername(username)
 	if err != nil {
 		return errors.New("failed to check username existence")
 	}
@@ -67,18 +72,16 @@ func (s *AuthService) checkEmailAndUsername(email, username string)  error{
 }
 
 func (s *AuthService) Login(email, password string) (string, string, error) {
-	
+
 	user, err := s.Repo.GetUserByEmail(email)
 	if err != nil {
 		return "", "", errors.New("user not found")
 	}
 
-	
 	if err := s.verifyPassword(user.Password, password); err != nil {
 		return "", "", err
 	}
 
-	
 	accessToken, refreshToken, err := token.GenerateTokens(user.ID)
 	if err != nil {
 		return "", "", errors.New("failed to generate token")
@@ -88,10 +91,9 @@ func (s *AuthService) Login(email, password string) (string, string, error) {
 }
 
 func (s *AuthService) verifyPassword(hashedPassword, plainPassword string) error {
-	
+
 	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(plainPassword)); err != nil {
 		return errors.New("invalid password")
 	}
 	return nil
 }
-
