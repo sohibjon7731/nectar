@@ -6,7 +6,6 @@
         "contact": {},
         "version": "1.0"
     },
-    "basePath": "/api/v1",
     "paths": {
         "/auth/login": {
             "post": {
@@ -108,6 +107,11 @@
         },
         "/products/all": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get All Products",
                 "consumes": [
                     "application/json"
@@ -143,6 +147,11 @@
         },
         "/products/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Adds a new product with an image to the system",
                 "consumes": [
                     "multipart/form-data"
@@ -215,6 +224,11 @@
         },
         "/products/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "delete a product",
                 "consumes": [
                     "application/json"
@@ -259,6 +273,11 @@
         },
         "/products/update/{id}": {
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing product with a new image (optional)",
                 "consumes": [
                     "multipart/form-data"
@@ -398,6 +417,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

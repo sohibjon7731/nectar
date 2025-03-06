@@ -115,6 +115,11 @@ const docTemplate = `{
         },
         "/products/all": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get All Products",
                 "consumes": [
                     "application/json"
@@ -150,6 +155,11 @@ const docTemplate = `{
         },
         "/products/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Adds a new product with an image to the system",
                 "consumes": [
                     "multipart/form-data"
@@ -222,6 +232,11 @@ const docTemplate = `{
         },
         "/products/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "delete a product",
                 "consumes": [
                     "application/json"
@@ -266,6 +281,11 @@ const docTemplate = `{
         },
         "/products/update/{id}": {
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing product with a new image (optional)",
                 "consumes": [
                     "multipart/form-data"
@@ -406,6 +426,13 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
@@ -413,7 +440,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/api/v1",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Swagger Example API",
 	Description:      "This is a sample server for Swagger integration.",

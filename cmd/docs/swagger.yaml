@@ -1,4 +1,3 @@
-basePath: /api/v1
 definitions:
   dto.Error:
     properties:
@@ -133,6 +132,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get All products
       tags:
       - Products
@@ -182,6 +183,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Create a new product
       tags:
       - Products
@@ -211,6 +214,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: delete a product
       tags:
       - Products
@@ -261,7 +266,14 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Update a product
       tags:
       - Products
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

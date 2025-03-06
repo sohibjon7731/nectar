@@ -9,6 +9,7 @@ import (
 	docs "github.com/sohibjon7731/ecommerce_backend/cmd/docs"
 	"github.com/sohibjon7731/ecommerce_backend/config"
 	authHandler "github.com/sohibjon7731/ecommerce_backend/internal/auth/handler"
+	"github.com/sohibjon7731/ecommerce_backend/internal/auth/middleware"
 	productHandler "github.com/sohibjon7731/ecommerce_backend/internal/product/handler"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,6 +18,9 @@ import (
 // @title Swagger Example API
 // @version 1.0
 // @description This is a sample server for Swagger integration.
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 // @BasePath /api/v1
 func main() {
 	
@@ -41,6 +45,7 @@ func main() {
 		}
 
 		products := api.Group("/products")
+		products.Use(middleware.AuthMiddleware())
 		{
 			products.POST("/create", productH.Create)
 			products.GET("/all", productH.GetAllProducts)

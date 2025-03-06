@@ -25,6 +25,7 @@ func NewProductHandler() *ProductHandler {
 // @Summary      Create a new product
 // @Description  Adds a new product with an image to the system
 // @Tags         Products
+// @Security	 BearerAuth
 // @Accept       multipart/form-data
 // @Produce      json
 // @Param        title formData string true "Product title"
@@ -56,9 +57,9 @@ func (h *ProductHandler) Create(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni saqlashda xatolik"})
 		return
 	}
-	host:= c.Request.Host
-	scheme:= "http"
-	if c.Request.TLS!=nil {
+	host := c.Request.Host
+	scheme := "http"
+	if c.Request.TLS != nil {
 		scheme = "https"
 	}
 	imageURL := fmt.Sprintf("%s://%s/upload/%s", scheme, host, file.Filename)
@@ -74,16 +75,17 @@ func (h *ProductHandler) Create(c *gin.Context) {
 	})
 }
 
-// GetAllProducts godoc
-// @Summary Get All products
-// @Description Get All Products
-// @Tags Products
-// @Accept json
-// @Produce json
-// @Success 200 {object} dto.SuccessResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 500 {object} dto.ErrorResponse
-// @Router /products/all [get]
+// GetAllProducts 	godoc
+// @Summary 		Get All products
+// @Description 	Get All Products
+// @Tags 			Products
+// @Security 		BearerAuth
+// @Accept 			json
+// @Produce 		json
+// @Success 		200 {object} dto.SuccessResponse
+// @Failure 		400 {object} dto.ErrorResponse
+// @Failure 		500 {object} dto.ErrorResponse
+// @Router 			/products/all [get]
 func (h *ProductHandler) GetAllProducts(c *gin.Context) {
 	products, err := h.Service.GetAllProducts()
 	if err != nil {
@@ -101,6 +103,7 @@ func (h *ProductHandler) GetAllProducts(c *gin.Context) {
 // @Summary      Update a product
 // @Description  Updates an existing product with a new image (optional)
 // @Tags         Products
+// @Security	 BearerAuth
 // @Accept       multipart/form-data
 // @Produce      json
 // @Param        id path int true "Product ID"
@@ -140,17 +143,18 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, updatedProduct)
 }
 
-// DeleteProduct godoc
-// @Summary delete a product
-// @Description delete a product
-// @Tags Products
-// @Accept json
-// @Produce json
-// @Param id path int true "Product ID"
-// @Success 201 {object} dto.SuccessResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 500 {object} dto.ErrorResponse
-// @Router /products/delete/{id} [delete]
+// DeleteProduct 	godoc
+// @Summary 		delete a product
+// @Description 	delete a product
+// @Tags 			Products
+// @Security	 	BearerAuth
+// @Accept 			json
+// @Produce 		json
+// @Param 			id path int true "Product ID"
+// @Success 		201 {object} dto.SuccessResponse
+// @Failure 		400 {object} dto.ErrorResponse
+// @Failure 		500 {object} dto.ErrorResponse
+// @Router 			/products/delete/{id} [delete]
 func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 64)
