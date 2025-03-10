@@ -33,8 +33,6 @@ definitions:
       access_token:
         example: string
         type: string
-      refresh_token:
-        type: string
     type: object
   dto.SuccessResponse:
     properties:

@@ -412,9 +412,6 @@ const docTemplate = `{
                 "access_token": {
                     "type": "string",
                     "example": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
                 }
             }
         },
