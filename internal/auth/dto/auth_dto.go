@@ -13,5 +13,5 @@ type LoginDTO struct {
 
 type Success struct {
 	AccessToken  string `json:"access_token" example:"string"`
-	RefreshToken string `json:"refresh_token" exapmle:"string"`
+
 }

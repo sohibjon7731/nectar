@@ -37,7 +37,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		})
 		return
 	}
-	access_token, refresh_token, err := h.Service.Register(input.Email, input.Password, input.Username)
+	access_token,err := h.Service.Register(input.Email, input.Password, input.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -46,7 +46,6 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"access_token":  access_token,
-		"refresh_token": refresh_token,
 	})
 }
 
@@ -72,7 +71,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	accessToken, refreshToken, err := h.Service.Login(input.Email, input.Password)
+	accessToken,err := h.Service.Login(input.Email, input.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -82,6 +81,6 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"access_token":  accessToken,
-		"refresh_token": refreshToken,
+		
 	})
 }

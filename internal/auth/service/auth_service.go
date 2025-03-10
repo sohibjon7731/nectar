@@ -21,34 +21,34 @@ func NewAuthService() *AuthService {
 	return &AuthService{Repo: *repo}
 }
 
-func (s *AuthService) Register(email, password, username string) (string, string, error) {
+func (s *AuthService) Register(email, password, username string) (string, error) {
 	if err := validator.EmailValidation(email); err != nil {
-		return "", "", err
+		return "", err
 	}
 
 	if err := s.checkEmailAndUsername(email, username); err != nil {
-		return "", "", err
+		return "", err
 	}
 
 	if err := validator.PasswordValidation(password); err != nil {
-		return "", "", errors.New("invalid password")
+		return "", errors.New("invalid password")
 	}
 
 	hashedPassword, err := util.HashPassword(password)
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 	user := &model.User{Email: email, Password: hashedPassword, Username: username}
 	if err := s.Repo.CreateUser(user); err != nil {
-		return "", "", errors.New("failed to create user")
+		return "", errors.New("failed to create user")
 	}
 	fmt.Println("user", user)
-	accessToken, refreshToken, err := token.GenerateTokens(user.ID)
+	accessToken, err := token.GenerateTokens(user.ID)
 	if err != nil {
-		return "", "", errors.New("failed to generate token")
+		return "", errors.New("failed to generate token")
 	}
 
-	return accessToken, refreshToken, nil
+	return accessToken, nil
 }
 
 func (s *AuthService) checkEmailAndUsername(email, username string) error {
@@ -71,23 +71,23 @@ func (s *AuthService) checkEmailAndUsername(email, username string) error {
 	return nil
 }
 
-func (s *AuthService) Login(email, password string) (string, string, error) {
+func (s *AuthService) Login(email, password string) (string, error) {
 
 	user, err := s.Repo.GetUserByEmail(email)
 	if err != nil {
-		return "", "", errors.New("user not found")
+		return "", errors.New("user not found")
 	}
 
 	if err := s.verifyPassword(user.Password, password); err != nil {
-		return "", "", err
+		return "", err
 	}
 
-	accessToken, refreshToken, err := token.GenerateTokens(user.ID)
+	accessToken,err := token.GenerateTokens(user.ID)
 	if err != nil {
-		return "", "", errors.New("failed to generate token")
+		return "", errors.New("failed to generate token")
 	}
 
-	return accessToken, refreshToken, nil
+	return accessToken,nil
 }
 
 func (s *AuthService) verifyPassword(hashedPassword, plainPassword string) error {
