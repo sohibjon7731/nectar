@@ -48,7 +48,7 @@ func (h *ProductHandler) Create(c *gin.Context) {
 	file, err := c.FormFile("image")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "error uploading image",
+			"error": "Image file is required or invalid",
 		})
 		return
 	}
@@ -140,7 +140,7 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, updatedProduct)
+	c.JSON(http.StatusOK, updatedProduct)
 }
 
 // DeleteProduct 	godoc
