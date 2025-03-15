@@ -13,11 +13,11 @@ type AuthRepository struct {
 }
 
 func NewAuthRepository() *AuthRepository {
-	db, err:= database.DBConnect()
+	db, err := database.DBConnect()
 	if err != nil {
 		log.Fatal("Failed to connect to database")
 	}
-	err=db.AutoMigrate(&model.User{})
+	err = db.AutoMigrate(&model.User{})
 	if err != nil {
 		log.Fatal("failed to migrate user model: " + err.Error())
 	}
@@ -47,11 +47,11 @@ func (r *AuthRepository) ExistUserEmail(email string) (bool, error) {
 
 }
 
-func (r *AuthRepository) ExistUserUsername(username string) (bool, error)  {
+func (r *AuthRepository) ExistUserUsername(username string) (bool, error) {
 	var count int64
-	err:= r.DB.Model(&model.User{}).Where("username= ?", username).Count(&count).Error
-	if err!=nil {
+	err := r.DB.Model(&model.User{}).Where("username= ?", username).Count(&count).Error
+	if err != nil {
 		return false, err
 	}
-	return count>0, nil
+	return count > 0, nil
 }
