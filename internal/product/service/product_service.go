@@ -18,12 +18,13 @@ func NewProductService() *ProductService {
 	return &ProductService{Repo: *repo}
 }
 
-func (s *ProductService) Create(title, description string, price float64, image string) error {
+func (s *ProductService) Create(title, description string, price float64, image string, categoryID uint) error {
 	product := model.Product{
 		Title:       title,
 		Description: description,
 		Price:       price,
 		Image:       image,
+		CategoryID:  categoryID,
 	}
 	err := s.Repo.Create(&product)
 	if err != nil {
@@ -40,12 +41,11 @@ func (s *ProductService) GetAllProducts() ([]model.Product, error) {
 	return products, nil
 }
 
-func (s *ProductService) UpdateProduct(id uint64,updateDTO dto.ProductDTO) (*model.Product , error){
+func (s *ProductService) UpdateProduct(id uint64, updateDTO dto.ProductDTO) (*model.Product, error) {
 	return s.Repo.UpdateProduct(id, updateDTO)
 }
 
-func (s *ProductService) DeleteProduct(id uint64) error  {
+func (s *ProductService) DeleteProduct(id uint64) error {
 	fmt.Println("nimadir")
 	return s.Repo.DeleteProduct(id)
 }
-

@@ -8,41 +8,39 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sohibjon7731/ecommerce_backend/internal/product/dto"
-	"github.com/sohibjon7731/ecommerce_backend/internal/product/service"
+	"github.com/sohibjon7731/ecommerce_backend/internal/category/dto"
+	"github.com/sohibjon7731/ecommerce_backend/internal/category/service"
 )
 
-type ProductHandler struct {
-	Service service.ProductService
+
+type CategoryHandler struct {
+	Service service.CategoryService
 }
 
-func NewProductHandler() *ProductHandler {
-	service := service.NewProductService()
-	return &ProductHandler{Service: *service}
+func NewCategoryHandler() *CategoryHandler {
+	service := service.NewCategoryRepository()
+	return &CategoryHandler{Service: *service}
 }
 
-// CreateProduct godoc
-// @Summary      Create a new product
-// @Description  Adds a new product with an image to the system
-// @Tags         Products
+// CreateCategory godoc
+// @Summary      Create a new category
+// @Description  Adds a new category with an image to the system
+// @Tags         Categories
 // @Security	 BearerAuth
 // @Accept       multipart/form-data
 // @Produce      json
-// @Param        title formData string true "Product title"
-// @Param        description formData string true "Product description"
-// @Param        price formData number true "Product price"
-// @Param        category_id formData number true "Product category"
-// @Param        image formData file true "Product image"
+// @Param        title formData string true "Category title"
+// @Param        image formData file true "Category image"
 // @Success      201 {object} map[string]interface{}
 // @Failure      400 {object} map[string]string
 // @Failure      500 {object} map[string]string
-// @Router       /products/create [post]
-func (h *ProductHandler) Create(c *gin.Context) {
+// @Router       /categories/create [post]
+func (h *CategoryHandler) Create(c *gin.Context) {
 	const uploadPath = "./uploads/"
-	var input dto.ProductDTO
+	var input dto.CategoryDTO
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"error": "invalid input",
 		})
 		return
 	}
@@ -64,8 +62,7 @@ func (h *ProductHandler) Create(c *gin.Context) {
 		scheme = "https"
 	}
 	imageURL := fmt.Sprintf("%s://%s/upload/%s", scheme, host, file.Filename)
-
-	err = h.Service.Create(input.Title, input.Description, input.Price, imageURL, uint(input.CategoryID))
+	err = h.Service.Create(input.Title, imageURL)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -73,23 +70,23 @@ func (h *ProductHandler) Create(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{
-		"message": "product created successfuly",
+		"message": "category created successfuly",
 	})
 }
 
 // GetAllProducts 	godoc
-// @Summary 		Get All products
-// @Description 	Get All Products
-// @Tags 			Products
+// @Summary 		Get All categories
+// @Description 	Get All Categories
+// @Tags 			Categories
 // @Security 		BearerAuth
 // @Accept 			json
 // @Produce 		json
 // @Success 		200 {object} dto.SuccessResponse
 // @Failure 		400 {object} dto.ErrorResponse
 // @Failure 		500 {object} dto.ErrorResponse
-// @Router 			/products/all [get]
-func (h *ProductHandler) GetAllProducts(c *gin.Context) {
-	products, err := h.Service.GetAllProducts()
+// @Router 			/categories/all [get]
+func (h *CategoryHandler) GetAllCategories(c *gin.Context) {
+	categories, err := h.Service.GetAllCategories()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -97,44 +94,40 @@ func (h *ProductHandler) GetAllProducts(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"products": dto.ConvertToProductResponseDTOs(products),
+		"categories": dto.ConvertToCategoryResponseDTOs(categories),
 	})
 }
 
-// UpdateProduct godoc
-// @Summary      Update a product
-// @Description  Updates an existing product with a new image (optional)
-// @Tags         Products
+// UpdateCategory godoc
+// @Summary      Update a category
+// @Description  Updates an existing category with a new image (optional)
+// @Tags         Categories
 // @Security	 BearerAuth
 // @Accept       multipart/form-data
 // @Produce      json
-// @Param        id path int true "Product ID"
-// @Param        title formData string false "Product title"
-// @Param        description formData string false "Product description"
-// @Param        price formData number false "Product price"
-// @Param        image formData file false "New product image (optional)"
+// @Param        id path int true "Category ID"
 // @Success      200 {object} map[string]interface{}
 // @Failure      400 {object} map[string]string
 // @Failure      500 {object} map[string]string
-// @Router       /products/update/{id} [patch]
-func (h *ProductHandler) UpdateProduct(c *gin.Context) {
+// @Router       /categories/update/{id} [patch]
+func (h *CategoryHandler) UpdateCategory(c *gin.Context) {
 	idParam := c.Param("id")
 	fmt.Println("Received ID:", idParam)
 	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid Product ID",
+			"error": "Invalid Category ID",
 		})
 		return
 	}
-	var productDTO dto.ProductDTO
-	if err := c.ShouldBind(&productDTO); err != nil {
+	var categoryDTO dto.CategoryDTO
+	if err := c.ShouldBind(&categoryDTO); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request body",
 		})
 		return
 	}
-	updatedProduct, err := h.Service.UpdateProduct(id, productDTO)
+	updatedCategory, err := h.Service.UpdateCategory(id, categoryDTO)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -142,22 +135,22 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, updatedProduct)
+	c.JSON(http.StatusOK, updatedCategory)
 }
 
-// DeleteProduct 	godoc
-// @Summary 		delete a product
-// @Description 	delete a product
-// @Tags 			Products
+// DeleteCategory 	godoc
+// @Summary 		delete a category
+// @Description 	delete a category
+// @Tags 			Categories
 // @Security	 	BearerAuth
 // @Accept 			json
 // @Produce 		json
-// @Param 			id path int true "Product ID"
+// @Param 			id path int true "Category ID"
 // @Success 		201 {object} dto.SuccessResponse
 // @Failure 		400 {object} dto.ErrorResponse
 // @Failure 		500 {object} dto.ErrorResponse
-// @Router 			/products/delete/{id} [delete]
-func (h *ProductHandler) DeleteProduct(c *gin.Context) {
+// @Router 			/categories/delete/{id} [delete]
+func (h *CategoryHandler) DeleteCategory(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
@@ -167,7 +160,7 @@ func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 		return
 	}
 
-	err = h.Service.DeleteProduct(id)
+	err = h.Service.DeleteCategory(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -175,6 +168,6 @@ func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"success": "product deleted successfully",
+		"success": "category deleted successfully",
 	})
 }

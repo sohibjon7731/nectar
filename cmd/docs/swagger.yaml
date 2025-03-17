@@ -110,6 +110,139 @@ paths:
       summary: Register a new user
       tags:
       - Accounts
+  /categories/all:
+    get:
+      consumes:
+      - application/json
+      description: Get All Categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get All categories
+      tags:
+      - Categories
+  /categories/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Adds a new category with an image to the system
+      parameters:
+      - description: Category title
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: Category image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new category
+      tags:
+      - Categories
+  /categories/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: delete a category
+      tags:
+      - Categories
+  /categories/update/{id}:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: Updates an existing category with a new image (optional)
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update a category
+      tags:
+      - Categories
   /products/all:
     get:
       consumes:
@@ -154,6 +287,11 @@ paths:
       - description: Product price
         in: formData
         name: price
+        required: true
+        type: number
+      - description: Product category
+        in: formData
+        name: category_id
         required: true
         type: number
       - description: Product image

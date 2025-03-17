@@ -23,7 +23,7 @@ func NewProductRepository() *ProductRepository {
 	err = db.AutoMigrate(&model.Product{})
 	if err != nil {
 		log.Fatal("Failed to migrate Product model")
-	}
+	}	
 
 	return &ProductRepository{
 		DB: db,

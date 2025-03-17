@@ -10,6 +10,7 @@ import (
 	"github.com/sohibjon7731/ecommerce_backend/config"
 	authHandler "github.com/sohibjon7731/ecommerce_backend/internal/auth/handler"
 	"github.com/sohibjon7731/ecommerce_backend/internal/auth/middleware"
+	categoryHandler "github.com/sohibjon7731/ecommerce_backend/internal/category/handler"
 	productHandler "github.com/sohibjon7731/ecommerce_backend/internal/product/handler"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -23,7 +24,7 @@ import (
 // @name Authorization
 // @BasePath /api/v1
 func main() {
-	
+
 	if err := config.LoadConfig(); err != nil {
 		log.Println("Warning: Config file not found or invalid:", err)
 	}
@@ -35,6 +36,7 @@ func main() {
 
 	authH := authHandler.NewAuthHandler()
 	productH := productHandler.NewProductHandler()
+	categoryH := categoryHandler.NewCategoryHandler()
 
 	api := r.Group("/api/v1")
 	{
@@ -51,6 +53,14 @@ func main() {
 			products.GET("/all", productH.GetAllProducts)
 			products.PATCH("/update/:id", productH.UpdateProduct)
 			products.DELETE("/delete/:id", productH.DeleteProduct)
+		}
+		categories := api.Group("/categories")
+		categories.Use(middleware.AuthMiddleware())
+		{
+			categories.POST("/create", categoryH.Create)
+			categories.GET("/all", categoryH.GetAllCategories)
+			categories.PATCH("/update/:id", categoryH.UpdateCategory)
+			categories.DELETE("/delete/:id", categoryH.DeleteCategory)
 		}
 	}
 
