@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sohibjon7731/ecommerce_backend/internal/product/dto"
-	"github.com/sohibjon7731/ecommerce_backend/internal/product/service"
+	"github.com/sohibjon7731/nectar/internal/product/dto"
+	"github.com/sohibjon7731/nectar/internal/product/service"
 )
 
 type ProductHandler struct {
@@ -165,6 +165,7 @@ func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 			"error": errors.New("invalid id"),
 		})
 		return
+		
 	}
 
 	err = h.Service.DeleteProduct(id)

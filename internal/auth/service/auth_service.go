@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/sohibjon7731/ecommerce_backend/internal/auth/model"
-	"github.com/sohibjon7731/ecommerce_backend/internal/auth/repository"
-	"github.com/sohibjon7731/ecommerce_backend/internal/auth/token"
-	"github.com/sohibjon7731/ecommerce_backend/internal/auth/util"
-	"github.com/sohibjon7731/ecommerce_backend/internal/auth/validator"
+	"github.com/sohibjon7731/nectar/internal/auth/model"
+	"github.com/sohibjon7731/nectar/internal/auth/repository"
+	"github.com/sohibjon7731/nectar/internal/auth/token"
+	"github.com/sohibjon7731/nectar/internal/auth/util"
+	"github.com/sohibjon7731/nectar/internal/auth/validator"
 	"golang.org/x/crypto/bcrypt"
 )
 

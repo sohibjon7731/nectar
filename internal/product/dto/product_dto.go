@@ -3,7 +3,7 @@ package dto
 import (
 	"mime/multipart"
 
-	"github.com/sohibjon7731/ecommerce_backend/internal/product/model"
+	"github.com/sohibjon7731/nectar/internal/product/model"
 )
 
 type ProductDTO struct {

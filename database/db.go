@@ -3,7 +3,7 @@ package database
 import (
 	"log"
 
-	"github.com/sohibjon7731/ecommerce_backend/config"
+	"github.com/sohibjon7731/nectar/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

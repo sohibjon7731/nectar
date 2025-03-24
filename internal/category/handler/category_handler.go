@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sohibjon7731/ecommerce_backend/internal/category/dto"
-	"github.com/sohibjon7731/ecommerce_backend/internal/category/service"
+	"github.com/sohibjon7731/nectar/internal/category/dto"
+	"github.com/sohibjon7731/nectar/internal/category/service"
 )
 
 

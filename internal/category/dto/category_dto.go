@@ -3,7 +3,7 @@ package dto
 import (
 	"mime/multipart"
 
-	"github.com/sohibjon7731/ecommerce_backend/internal/category/model"
+	"github.com/sohibjon7731/nectar/internal/category/model"
 )
 
 type CategoryDTO struct {

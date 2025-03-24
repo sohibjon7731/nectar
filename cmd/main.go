@@ -4,14 +4,14 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/sohibjon7731/ecommerce_backend/cmd/docs"
+	_ "github.com/sohibjon7731/nectar/cmd/docs"
 
-	docs "github.com/sohibjon7731/ecommerce_backend/cmd/docs"
-	"github.com/sohibjon7731/ecommerce_backend/config"
-	authHandler "github.com/sohibjon7731/ecommerce_backend/internal/auth/handler"
-	"github.com/sohibjon7731/ecommerce_backend/internal/auth/middleware"
-	categoryHandler "github.com/sohibjon7731/ecommerce_backend/internal/category/handler"
-	productHandler "github.com/sohibjon7731/ecommerce_backend/internal/product/handler"
+	docs "github.com/sohibjon7731/nectar/cmd/docs"
+	"github.com/sohibjon7731/nectar/config"
+	authHandler "github.com/sohibjon7731/nectar/internal/auth/handler"
+	"github.com/sohibjon7731/nectar/internal/auth/middleware"
+	categoryHandler "github.com/sohibjon7731/nectar/internal/category/handler"
+	productHandler "github.com/sohibjon7731/nectar/internal/product/handler"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

@@ -1,6 +1,6 @@
 package model
 
-import "github.com/sohibjon7731/ecommerce_backend/internal/product/model"
+import "github.com/sohibjon7731/nectar/internal/product/model"
 
 type Category struct {
 	ID       uint            `gorm:"primaryKey;autoIncrement"`

@@ -3,8 +3,8 @@ package repository
 import (
 	"log"
 
-	"github.com/sohibjon7731/ecommerce_backend/database"
-	"github.com/sohibjon7731/ecommerce_backend/internal/auth/model"
+	"github.com/sohibjon7731/nectar/database"
+	"github.com/sohibjon7731/nectar/internal/auth/model"
 	"gorm.io/gorm"
 )
 

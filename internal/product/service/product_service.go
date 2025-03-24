@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/sohibjon7731/ecommerce_backend/internal/product/dto"
-	"github.com/sohibjon7731/ecommerce_backend/internal/product/model"
-	"github.com/sohibjon7731/ecommerce_backend/internal/product/repository"
+	"github.com/sohibjon7731/nectar/internal/product/dto"
+	"github.com/sohibjon7731/nectar/internal/product/model"
+	"github.com/sohibjon7731/nectar/internal/product/repository"
 )
 
 type ProductService struct {

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/sohibjon7731/ecommerce_backend/internal/category/dto"
-	"github.com/sohibjon7731/ecommerce_backend/internal/category/model"
-	"github.com/sohibjon7731/ecommerce_backend/internal/category/repository"
+	"github.com/sohibjon7731/nectar/internal/category/dto"
+	"github.com/sohibjon7731/nectar/internal/category/model"
+	"github.com/sohibjon7731/nectar/internal/category/repository"
 )
 
 type CategoryService struct {

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/sohibjon7731/ecommerce_backend/config"
+	"github.com/sohibjon7731/nectar/config"
 )
 
 func GenerateTokens(userID uint) (string, error) {

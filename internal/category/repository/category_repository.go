@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sohibjon7731/ecommerce_backend/database"
-	"github.com/sohibjon7731/ecommerce_backend/internal/category/dto"
-	"github.com/sohibjon7731/ecommerce_backend/internal/category/model"
+	"github.com/sohibjon7731/nectar/database"
+	"github.com/sohibjon7731/nectar/internal/category/dto"
+	"github.com/sohibjon7731/nectar/internal/category/model"
 	"gorm.io/gorm"
 )
 
