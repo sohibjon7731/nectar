@@ -36,5 +36,6 @@ func LoadConfig() error {
 }
 
 func GetDBDSN() string {
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", DBHost, DBPort, DBUser, DBPassword, DBName)
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		DBUser, DBPassword, DBHost, DBPort, DBName)
 }

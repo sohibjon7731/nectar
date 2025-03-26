@@ -20,29 +20,17 @@ type CategoryProductResponseDTO struct {
 }
 
 type CategoryResponseDTO struct {
-	ID       uint                         `json:"id"`
-	Title    string                       `json:"title"`
-	Image    string                       `json:"image"`
-	Products []CategoryProductResponseDTO `json:"products"`
+	ID    uint   `json:"id"`
+	Title string `json:"title"`
+	Image string `json:"image"`
 }
 
 func ToCategoryResponseDTO(category model.Category) CategoryResponseDTO {
-	var productDTOs []CategoryProductResponseDTO
-	for _, product := range category.Products {
-		productDTOs = append(productDTOs, CategoryProductResponseDTO{
-			ID:          product.ID,
-			Title:       product.Title,
-			Description: product.Description,
-			Price:       product.Price,
-			Image:       product.Image,
-		})
-	}
 
 	return CategoryResponseDTO{
-		ID:       category.ID,
-		Title:    category.Title,
-		Image:    category.Image,
-		Products: productDTOs,
+		ID:    category.ID,
+		Title: category.Title,
+		Image: category.Image,
 	}
 }
 

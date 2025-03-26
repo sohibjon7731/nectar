@@ -1,18 +1,17 @@
 package repository
 
 import (
+	"database/sql"
 	"errors"
-	"fmt"
 	"log"
 
 	"github.com/sohibjon7731/nectar/database"
 	"github.com/sohibjon7731/nectar/internal/category/dto"
 	"github.com/sohibjon7731/nectar/internal/category/model"
-	"gorm.io/gorm"
 )
 
 type CategoryRepository struct {
-	DB *gorm.DB
+	DB *sql.DB
 }
 
 func NewCategoryRepository() *CategoryRepository {
@@ -20,39 +19,65 @@ func NewCategoryRepository() *CategoryRepository {
 	if err != nil {
 		log.Fatal("Failed to connect to database")
 	}
-	err = db.AutoMigrate(&model.Category{})
-	if err != nil {
-		log.Fatal("Failed to migrate Category model")
-	}
+
 	return &CategoryRepository{
 		DB: db,
 	}
 }
 
 func (r *CategoryRepository) Create(category *model.Category) error {
-	return r.DB.Create(category).Error
+	query := `INSERT INTO categories (title, image) VALUES ($1, $2)`
+	_, err := r.DB.Exec(query, &category.Title, &category.Image)
+	if err != nil {
+		log.Println("Error insertiong category: ", err)
+		return err
+	}
+	return nil
+
 }
 
 func (r *CategoryRepository) GetAllCategories() ([]model.Category, error) {
-	var categories []model.Category
-	if err := r.DB.Preload("Products").Find(&categories).Error; err != nil {
+	query := `SELECT id, title, image FROM categories`
+	rows, err := r.DB.Query(query)
+	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
+
+	var categories []model.Category
+	for rows.Next() {
+		var c model.Category
+		err := rows.Scan(&c.ID, &c.Title, &c.Image)
+		if err != nil {
+			return nil, err
+		}
+		categories = append(categories, c)
+	}
+
 	return categories, nil
 }
 
 func (r *CategoryRepository) UpdateCategory(id uint64, updateDTO dto.CategoryDTO) (*model.Category, error) {
+	query := `SELECT id, title, image FROM categories WHERE id = $1`
+	row := r.DB.QueryRow(query, id)
+
 	var category model.Category
-	if err := r.DB.First(&category, id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("category not found with this id ")
+	err := row.Scan(&category.ID, &category.Title, &category.Image)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, errors.New("category not found with this id")
 		}
 		return nil, err
 	}
+
 	category.Title = updateDTO.Title
 	category.Image = updateDTO.Image.Filename
 
-	if err := r.DB.Save(&category).Error; err != nil {
+	updateQuery := `UPDATE categories SET title = $1, image = $2 WHERE id = $3`
+	_, err = r.DB.Exec(updateQuery, category.Title, category.Image, id)
+	if err != nil {
+		log.Println("Error updating category:", err)
 		return nil, err
 	}
 
@@ -60,17 +85,21 @@ func (r *CategoryRepository) UpdateCategory(id uint64, updateDTO dto.CategoryDTO
 }
 
 func (r *CategoryRepository) DeleteCategory(id uint64) error {
-	result := r.DB.Where("id = ?", id).Delete(&model.Category{})
-	if result.Error != nil {
-		fmt.Println("error_delete:", result.Error)
-		return result.Error
+	var exists bool
+	checkQuery := `SELECT EXISTS (SELECT 1 FROM categories WHERE id=$1)`
+	err := r.DB.QueryRow(checkQuery, id).Scan(&exists)
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return errors.New("category not found with this id")
 	}
 
-	if result.RowsAffected == 0 {
-		fmt.Println("No category found with the given ID")
-		return fmt.Errorf("no category found with id %d", id)
+	deleteQuery := `DELETE FROM categories WHERE id=$1`
+	_, err = r.DB.Exec(deleteQuery, id)
+	if err != nil {
+		return err
 	}
 
-	fmt.Println("Category deleted successfully")
 	return nil
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/sohibjon7731/nectar/cmd/docs"
+	"github.com/sohibjon7731/nectar/database"
 
 	docs "github.com/sohibjon7731/nectar/cmd/docs"
 	"github.com/sohibjon7731/nectar/config"
@@ -28,6 +29,12 @@ func main() {
 	if err := config.LoadConfig(); err != nil {
 		log.Println("Warning: Config file not found or invalid:", err)
 	}
+
+	db, err:= database.DBConnect()
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+	database.ApplyMigrations(db)
 
 	r := gin.Default()
 	r.Static("/upload", "./uploads")
