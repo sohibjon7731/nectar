@@ -30,11 +30,13 @@ func main() {
 		log.Println("Warning: Config file not found or invalid:", err)
 	}
 
-	db, err:= database.DBConnect()
+	_, err:= database.DBConnect()
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
-	database.ApplyMigrations(db)
+	log.Println("Everything okay with connecting datbase")
+	
+	/* database.ApplyMigrations(db) */
 
 	r := gin.Default()
 	r.Static("/upload", "./uploads")

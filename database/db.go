@@ -3,8 +3,6 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"os"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/sohibjon7731/nectar/config"
@@ -13,9 +11,6 @@ import (
 var DB *sql.DB
 
 func DBConnect() (*sql.DB, error) {
-	if DB != nil {
-		return DB, nil
-	}
 
 	dsn := config.GetDBDSN()
 	fmt.Println("Connecting to:", dsn)
@@ -35,7 +30,7 @@ func DBConnect() (*sql.DB, error) {
 
 }
 
-func ApplyMigrations(DB *sql.DB) {
+/* func ApplyMigrations(DB *sql.DB) {
 	migrationFiles := []string{
 		"migrations/001_create_users_table.sql",
 		"migrations/002_create_categories_table.sql",
@@ -44,6 +39,7 @@ func ApplyMigrations(DB *sql.DB) {
 
 	for _, file := range migrationFiles {
 		query, err := os.ReadFile(file)
+		fmt.Println(query)
 		if err != nil {
 			log.Fatalf("Failed to read migration file %s: %v", file, err)
 		}
@@ -53,4 +49,4 @@ func ApplyMigrations(DB *sql.DB) {
 		}
 		fmt.Printf("Migration %s applied successfully!\n", file)
 	}
-}
+} */
