@@ -27,8 +27,20 @@ func NewProductRepository() *ProductRepository {
 }
 
 func (r *ProductRepository) Create(product *model.Product) error {
+	getQuery := `SELECT COUNT(*) FROM products WHERE title = $1 AND description = $2 AND price = $3 AND image = $4`
+	var count int
+	err := r.DB.QueryRow(getQuery, &product.Title, &product.Description, &product.Price, &product.Image).Scan(&count)
+
+	if err != nil {
+		return err
+	}
+
+	if count > 0 {
+		return errors.New("already exist")
+	}
+
 	query := `INSERT INTO products (title, description, price, image, category_id) VALUES ($1, $2, $3, $4, $5)`
-	_, err := r.DB.Exec(query, product.Title, product.Description, product.Price, product.Image, product.CategoryID)
+	_, err = r.DB.Exec(query, product.Title, product.Description, product.Price, product.Image, product.CategoryID)
 	return err
 }
 

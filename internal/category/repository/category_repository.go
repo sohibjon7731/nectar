@@ -26,8 +26,17 @@ func NewCategoryRepository() *CategoryRepository {
 }
 
 func (r *CategoryRepository) Create(category *model.Category) error {
+	getQuery := `SELECT COUNT(*) FROM categories WHERE title = $1 image = $2`
+	var count int
+	err := r.DB.QueryRow(getQuery, category.Title, category.Image).Scan(&count)
+	if err != nil {
+		return err
+	}
+	if count > 0 {
+		return errors.New("already exist")
+	}
 	query := `INSERT INTO categories (title, image) VALUES ($1, $2)`
-	_, err := r.DB.Exec(query, &category.Title, &category.Image)
+	_, err = r.DB.Exec(query, category.Title, category.Image)
 	if err != nil {
 		log.Println("Error insertiong category: ", err)
 		return err
