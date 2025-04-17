@@ -36,7 +36,7 @@ func (r *ProductRepository) Create(product *model.Product) error {
 	}
 
 	if count > 0 {
-		return errors.New("already exist")
+		return errors.New("product already exist")
 	}
 
 	query := `INSERT INTO products (title, description, price, image, category_id) VALUES ($1, $2, $3, $4, $5)`
