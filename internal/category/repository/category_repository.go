@@ -33,7 +33,7 @@ func (r *CategoryRepository) Create(category *model.Category) error {
 		return err
 	}
 	if count > 0 {
-		return errors.New("already exist")
+		return errors.New("category already exist")
 	}
 	query := `INSERT INTO categories (title, image) VALUES ($1, $2)`
 	_, err = r.DB.Exec(query, category.Title, category.Image)
